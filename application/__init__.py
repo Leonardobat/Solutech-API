@@ -27,6 +27,6 @@ def create_app(config=None):
     app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(skill.bp)
-    app.add_url_rule("/api/", endpoint="index")
+    app.add_url_rule("/api", endpoint="index")
 
     return app

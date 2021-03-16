@@ -35,7 +35,7 @@ def login_API() -> tuple:
 
     Notes
     -----
-    The expected JSON has this format {"user":"`USERNAME`" ;"passw":"`PASSWORD`"}
+    The expected JSON has this format {"user":"`USERNAME`" ;"password":"`PASSWORD`"}
     The return JSON has this format {"access_token":"`TOKEN`"}
 
     """
@@ -45,14 +45,14 @@ def login_API() -> tuple:
 
         if not data["user"]:
             error = "Missing username parameter"
-        if not data["passw"]:
+        if not data["password"]:
             error = "Missing password parameter"
 
         user = Users().get_login(user)
 
         if user is None:
             error = "Incorrect username"
-        elif not check_password_hash(user["password"], data["passw"]):
+        elif not check_password_hash(user["password"], data["password"]):
             error = "Incorrect password"
 
         if error is None:

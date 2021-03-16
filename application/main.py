@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" This is a simple of web index, all methods are implemented on specific blueprints.
+""" This is the API interface, create to be a proxy for external requests and the internal ones
 """
 from pathlib import Path
 from flask import (
@@ -15,8 +15,10 @@ from flask import (
 import requests
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from application.db.users import Users
+from flask_cors import CORS
 
 bp = Blueprint("web", __name__)
+CORS(bp)
 
 
 @bp.route("/<user>/info", methods=("GET",))
@@ -45,10 +47,10 @@ def commands(user) -> tuple:
         data = request.json
         url = Users().get_URL(user)
         response = requests.post(url, data)
-        if response.status_code == requests.codes.ok:
-            return 200
-        else:
+        if response.status_code != 200:
             return json.jsonify(error=response.json()), 400
+        else:
+            return 200
 
     else:
         return (

@@ -5,16 +5,19 @@ from flask import Blueprint, g, request, json, send_from_directory
 from flask_cors import CORS
 from application.db.users import Users
 
-bp = Blueprint("web_skill", __name__, url_prefix="/skill/")
+bp = Blueprint("web_skill", __name__, url_prefix="/api/skill")
 CORS(bp)
 
 
-@bp.route("/<user>/info", methods=("GET",))
+@bp.route("/<user>", methods=("GET",))
 def index(user) -> tuple:
-    
-    data = Users().get_skill_data(user)
-    if data is not None:
-        return json.jsonify(data), 200
+
+    url = Users().get_URL(user)
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        if data is not None:
+            return json.jsonify(data), 200
     else:
         return 404
 
